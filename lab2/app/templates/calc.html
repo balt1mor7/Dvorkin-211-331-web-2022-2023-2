@@ -1,0 +1,31 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+<form method="POST">
+    <div class="mb-3">
+        <label class="form-label" for="firstnumber">Введите первое число</label>
+        <input class="form-control" type="text" name="firstnumber" id="firstnumber"
+            value="{{request.form.firstnumber}}">
+    </div>
+    <select name="operation" id="operation">
+        <option {% if request.form.operation=='+' %}selected{% endif %}>+</option>
+        <option {% if request.form.operation=='-' %}selected{% endif %}>-</option>
+        <option {% if request.form.operation=='*' %}selected{% endif %}>*</option>
+        <option {% if request.form.operation=='/' %}selected{% endif %}>/</option>
+    </select>
+    <div class="mb-3">
+        <label class="form-label" for="secondnumber">Введите второе число</label>
+        <input class="form-control" type="text" name="secondnumber" id="secondnumber"
+            value="{{request.form.secondnumber}}">
+    </div>
+
+    <button class="btn btn-primary">Вычислить результата</button>
+
+    <label class="form-label" for="answer">Ответ:</label>
+    <input class="form-control disable" type="text" name="answer" id="answer" value="{{answer}}">
+</form>
+
+<p>{{error_text}}</p>
+
+{% endblock %}
