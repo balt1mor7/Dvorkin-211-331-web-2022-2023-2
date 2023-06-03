@@ -1,0 +1,43 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<main>
+    <h1>{{post['title']}}</h1>
+    <p>
+        {{post['author']}}
+        <time>{{post['date'].strftime('%d.%m.%Y')}}</time>
+    </p>
+    <img class="img-fluid px-5" src="{{ url_for('static', filename='images/' ~ post['image_filename']) }}" />
+    <section class="text-justify my-5">{{post['text']}}</section>
+    <form action="" method="POST">
+        <div class="container border rounded">
+            <div class="bg-light row border-bottom mb-3 py-2 ">
+                <label class="col m-0" for="comment">Оставьте комментарий</label>
+            </div>
+            <textarea class="form-control mb-3" name="comment" id="comment" rows="3"></textarea>
+            <button type="submit" class="btn btn-primary mb-3">Отправить</button>
+        </div>
+    </form>
+    <section>
+        {%for comment in post['comments']%}
+        <div class="media my-3">
+            <img class="mr-3 rounded-circle" width="32" src="{{ url_for('static', filename='images/avatar.jpg') }}">
+            <div class="media-body">
+                <h5 class="mt-0"> {{comment['author']}}</h5>
+                {{comment['text']}}
+                {%for reply in comment['replies']%}
+                <div class="media mt-3">
+                    <img class="mr-3 rounded-circle" width="32"
+                        src="{{ url_for('static', filename='images/avatar.jpg') }}">
+                    <div class="media-body">
+                        <h5 class="mt-0">{{reply.author}}</h5>
+                        {{reply.text}}
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+        </div>
+        {% endfor %}
+    </section>
+</main>
+{% endblock %}

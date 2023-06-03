@@ -1,0 +1,29 @@
+{% extends 'base.html' %} {% block content %}
+<h1 class="my-5">Последние посты</h1>
+<div class="row">
+  {% for post in posts %}
+  <div class="col-md-6 d-flex">
+    <div class="card mb-3">
+      <img
+        class="card-img-top"
+        src="{{ url_for('static', filename='images/' ~ post.image_filename) }}"
+        alt="Card image cap"
+      />
+      <div class="card-body">
+        <h5 class="card-title">{{ post.title }}</h5>
+        <p class="card-text">{{ post.text | truncate(100) }}</p>
+        <a
+          href="{{ url_for('post', index=loop.index0) }}"
+          class="btn btn-primary"
+          >Читать дальше &rarr;</a
+        >
+      </div>
+      <div class="card-footer">
+        Опубликовано {{ post.date.strftime('%d.%m.%Y') }}. Автор: {{ post.author
+        }}
+      </div>
+    </div>
+  </div>
+  {% endfor %}
+</div>
+{% endblock %}
