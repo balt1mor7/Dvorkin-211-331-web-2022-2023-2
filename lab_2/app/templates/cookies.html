@@ -1,0 +1,34 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<table class="table table-striped">
+    <thead class="thead-dark">
+        <tr>
+            <th class="text-center" scope="col">Key</th>
+            <th class="text-center" scope="col">Value</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for key, value in request.cookies.items() %}
+        <tr>
+            <td>{{key}}</td>
+            <td>{{value}} </td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+<form method="POST" action="{{ url_for('clear') }}">
+    <button type="submit" class="btn btn-danger">del cookies</button>
+</form>
+<form method="POST" action="{{ url_for('cookies') }}" class=" mt-5">
+    <div class="form-row">
+        <div class="col">
+            <input name="key" type="text" class="form-control" placeholder="Key" required>
+        </div>
+        <div class="col">
+            <input name="value" type="text" class="form-control" placeholder="Value">
+        </div>
+        <button type="submit" class="btn btn-primary">Create</button>
+    </div>
+</form>
+{% endblock %}
