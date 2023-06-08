@@ -1,0 +1,21 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<form method="POST">
+    <div class="form-floating mb-3">
+        <input type="text" name="userlogin" class="form-control" id="floatingInput" placeholder="Login">
+        <label for="floatingInput">Логин</label>
+    </div>
+    <div class="form-floating">
+        <input type="password" name="userpassword" class="form-control" id="floatingPassword" placeholder="Password">
+        <label for="floatingPassword">Пароль</label>
+    </div>
+    <div class="form-check mb-3">
+        <input class="form-check-input" name="remember_me" type="checkbox" id="flexCheckDefault">
+        <label class="form-check-label" for="flexCheckDefault">
+          Запомнить меня
+        </label>
+      </div>
+    <button type="submit" class="btn btn-primary">Войти</button>
+</form>
+{% endblock %}
