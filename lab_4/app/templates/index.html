@@ -1,0 +1,6 @@
+f current_user.is_authenticated %}
+Hi {{ current_user.login }}
+{% else %}
+Non authenticated
+{% endif %}
+{% endblock %}

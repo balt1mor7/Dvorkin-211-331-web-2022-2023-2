@@ -1,0 +1,65 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<table class="table">
+    <tbody>
+        <tr>
+            <td>
+                Идентификатор
+            </td>
+            <td>
+                {{user.id}}
+            </td>
+        </tr>
+        <tr>
+            <td>
+                Логин
+            </td>
+            <td>
+                {{user.login}}
+            </td>
+        </tr>
+        <tr>
+            <td>
+                Имя
+            </td>
+            <td>
+                {{user.first_name}}
+            </td>
+        </tr>
+        <tr>
+            <td>
+                Фамилия
+            </td>
+            <td>
+                {{user.last_name}}
+            </td>
+        </tr>
+        <tr>
+            <td>
+                Отчество
+            </td>
+            <td>
+                {{user.middle_name or ''}}
+            </td>
+        </tr>
+        <tr>
+            <td>
+                Дата регистрации
+            </td>
+            <td>
+                {{user.created_at}}
+            </td>
+        </tr>
+        <tr>
+            <td>
+                Роль
+            </td>
+            <td>
+                {{user.role_id or ''}}
+            </td>
+        </tr>
+    </tbody>
+</table>
+<a href="{{url_for('users')}}" class="btn btn-primary">Список пользователей</a>
+{% endblock %}
