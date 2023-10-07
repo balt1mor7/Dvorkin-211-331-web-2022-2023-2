@@ -1,0 +1,91 @@
+{% extends 'base.html' %}
+
+{% block head %}
+{{ super() }}
+<script defer src="{{ url_for('static', filename='users.js') }}"></script>
+{% endblock %}
+
+{% block content %}
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                №
+            </th>
+            <th>
+                ФИО
+            </th>
+            <th>
+                login
+            </th>
+            <th>
+                role
+            </th>
+            <th>
+                action
+            </th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for user in users_list %}
+        <tr>
+            <td>
+                {{ loop.index }}
+            </td>
+            <td id="fullName">
+                {{ user.last_name }} {{ user.first_name }} 
+                {% if user.middle_name %}
+                {{ user.middle_name }}
+                {% endif %}
+            </td>
+
+            <td>
+                {{ user.login }}
+            </td>
+            <td>
+                {{ user.role_name }}
+            </td>
+            <td>
+                <div class="btn-group" role="group">
+                    {% if current_user.is_authenticated %}
+                        {% if current_user.is_admin() or current_user.id == user.id %}
+                            <a class="btn btn-secondary" href="{{ url_for('show_user', user_id=user.id) }}">Просмотр</a>
+                        {% endif %}
+                    {% endif %}
+                    {% if current_user.is_authenticated and current_user.can('edit', user) %}
+                        <a class="btn btn-primary" href="{{ url_for('edit_user', user_id=user.id) }}">Редактировать</a>
+                    {% endif %}
+                    {% if current_user.is_authenticated and current_user.can('delete', user) %}
+                        <button class="btn btn-danger" data-bs-toggle="modal" data-url="{{ url_for('delete_user', user_id=user.id) }}" data-bs-target="#deleteUser">Удалить</button>
+                    {% endif %}
+                    <!-- Modal -->
+                    <div class="modal fade" id="deleteUser" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+                        <div class="modal-dialog">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <h5 class="modal-title" id="staticBackdropLabel">Удаление пользователя</h5>
+                                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                </div>
+                                <div class="modal-body">
+                                    <p>Вы уверены, что хотите удалить пользователя <span id="userLogin"></span>?</p>
+                                    <form class="d-none" action="" method="POST">
+                                        <input type="submit" id="deleteUserButton">
+                                    </form>
+                                </div>
+                                <div class="modal-footer">
+                                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Отмена</button>
+                                    <label for="deleteUserButton" class="btn btn-danger">Удалить</label>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+{% if current_user.is_authenticated and current_user.can('create') %}
+<a href="{{ url_for('users_new') }}" class="btn btn-primary">Добавить пользователя</a>
+{% endif %}
+{% endblock %}

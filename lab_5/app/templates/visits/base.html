@@ -1,0 +1,22 @@
+{% extends 'base.html' %}
+
+{% block content %}
+    <ul class="nav nav-tabs">
+        <li class="nav-item">
+            <a class="nav-link {% if request.endpoint == 'visits.logging' %}active{% endif %}" aria-current="page" 
+            href="{{ url_for('visits.logging') }}">Журнал посещений</a>
+        </li>
+        {% if current_user.is_admin() %}
+            <li class="nav-item">
+                <a class="nav-link {% if request.endpoint == 'visits.pages_stat' %}active{% endif %}" aria-current="page"
+                    href="{{ url_for('visits.pages_stat') }}">Статистика по страницам</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link {% if request.endpoint == 'visits.stat_user' %}active{% endif %}" aria-current="page"
+                    href="{{ url_for('visits.stat_user') }}">Статистика по пользователям</a>
+            </li>
+        {% endif %}
+    </ul>
+    {% block tab_content %}
+    {% endblock %}
+{% endblock %}

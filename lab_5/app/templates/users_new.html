@@ -1,0 +1,8 @@
+{% extends 'base.html' %}
+{% from 'form.html' import user_form %}
+
+{% block content %}
+<h2 class="my-3">Редактирование пользователя</h2>
+{{ user_form(user, url_for('update_user', user_id=user.id), roles_list, current_user, errors) }}
+
+{% endblock %}
