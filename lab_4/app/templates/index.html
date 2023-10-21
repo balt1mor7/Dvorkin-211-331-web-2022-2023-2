@@ -1,4 +1,7 @@
-f current_user.is_authenticated %}
+{% extends 'base.html' %}
+
+{% block content %}
+{% if current_user.is_authenticated %}
 Hi {{ current_user.login }}
 {% else %}
 Non authenticated
