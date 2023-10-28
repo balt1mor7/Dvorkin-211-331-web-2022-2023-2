@@ -1,0 +1,43 @@
+{% extends 'base.html' %}
+{% from 'pagination.html' import render_pagination %}
+
+{% block content %}
+    <div class="container">
+        <h2 class="my-3 text-center text-uppercase font-weight-bold">Все отзывы на книгу</h2>
+        <h2 class="my-3 text-center text-uppercase font-weight-bold">"{{ book_reviews[0].book.name }}"</h2>
+        <form action="{{ url_for('books.reviews', book_id=book_id)}}">
+            <div class="d-flex mb-4" style="justify-content: space-evenly;">
+                <div class="" style="height: 50px;">
+                    <a class="btn btn-outline-secondary" href="{{ url_for('books.show', book_id=book_id)}}">Назад</a>
+                </div>
+                <div>
+                    <select class="form-select me-4" style="width: 300px;" id="sort_reviews" name="sort_reviews" title="Сортировка отзывов">
+                        <option value="new" {% if "new" == request.args.get('sort_reviews') %}selected{% endif %}>По новизне</option>
+                        <option value="positive" {% if "positive" == request.args.get('sort_reviews') %}selected{% endif %}>Сначала положительные</option>
+                        <option value="negative" {% if "negative" == request.args.get('sort_reviews') %}selected{% endif %}>Сначала отрицательные</option>
+                    </select>
+                </div>
+                <div class="" style="height: 50px;">
+                    <button type="submit" class="btn btn-dark">
+                        Сортировать
+                    </button>
+                </div>
+            </div>
+        </form>
+        {% for review in book_reviews %}
+            <div class="card my-3">
+                <h5 class="card-header">{{ review.user.full_name }}</h5>
+                <span class="px-3">{{ review.created_at }}</span>
+                <div class="card-body">
+                <h5 class="card-title">Оценка: {{ review.rating_word }}</h5>
+                <p class="card-text">{{ review.text }}</p>
+                </div>
+            </div>
+        {% endfor %}
+    </div>
+
+    <div class="mb-5">
+        {{ render_pagination(pagination, request.endpoint, params) }}
+    </div>
+
+{% endblock %}

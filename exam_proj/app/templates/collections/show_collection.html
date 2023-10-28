@@ -1,0 +1,46 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="container">
+    <div class="my-5">
+        <h2 class="mb-3 text-center text-uppercase font-weight-bold">Книги в подборке "{{ collection.name }}"</h2>
+    </div>
+
+    <div class="books-list container-fluid">
+        <div class="row mb-3 mt-3 gap-2 justify-content-around">
+            {% for book in books %}
+            <div class="col-sm-3 d-flex justify-content-center">
+
+                <div class="card my-2 border-dark" data-url="{{ url_for('books.show', book_id=book.id) }}">
+                    <img class="card-img-top w-75 align-self-center mt-3"
+                        src="{{ url_for('image', image_id=book.background_image_id) }}" alt="Card image cap">
+                    <div class="card-body">
+                        <p class="card-title fw-bold">
+                            <span id="book_name">{{ book.name }}</span>
+                        </p>
+                        <p class="card-text">
+                            {{book.author}}, {{book.created_at}}<br>
+                            Жанр(ы): {% for genre in book.genres %}
+                        <ul>
+                            <li>{{ genre.name }}</li>
+                        </ul>
+                        {% endfor %}
+                        </p>
+                    </div>
+                    <div class="card-footer text-muted">
+                        <p class="mb-2">
+                            Отзывы: {{ reviews_count.get(book.id, 0) }}
+                            <span>★</span> <span>{{ "%.2f" | format(book.rating) }}</span>
+                        </p>
+
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+
+
+
+</div>
+{% endblock %}

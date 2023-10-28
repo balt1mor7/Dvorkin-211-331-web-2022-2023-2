@@ -1,0 +1,93 @@
+{% extends 'base.html' %}
+{% from 'pagination.html' import render_pagination %}
+
+{% block content %}
+<div class="container">
+    <div class="my-5">
+        <h2 class="mb-3 text-center text-uppercase font-weight-bold">Каталог книг</h2>
+    </div>
+
+    <div class="books-list container-fluid">
+        <div class="row mb-3 mt-3 gap-2 justify-content-around">
+            {% for book in books %}
+            <div class="col-sm-3 d-flex justify-content-center">
+
+                <div class="card my-2 border-dark" data-url="{{ url_for('books.show', book_id=book.id) }}">
+                    <img class="card-img-top w-75 align-self-center mt-3"
+                        src="{{ url_for('image', image_id=book.background_image_id) }}" alt="Card image cap">
+                    <div class="card-body">
+                        <p class="card-title fw-bold">
+                            <span id="book_name">{{ book.name }}</span>
+                        </p>
+                        <p class="card-text">
+                            {{book.author}}, {{book.created_at}}<br>
+                            Жанр(ы): {% for genre in book.genres %}
+                        <ul>
+                            <li>{{ genre.name }}</li>
+                        </ul>
+                        {% endfor %}
+                        </p>
+                        {% if current_user.is_authenticated %}
+                        <div class="admin_buttons text-center">
+                            {% if current_user.can('update') %}
+                            <a class="btn btn-outline-primary"
+                                href="{{ url_for('books.edit', book_id = book.id) }}">Редактировать</a>
+                            {% endif %}
+                            {% if current_user.can('delete') %}
+                            <button class="btn btn-outline-danger" data-bs-toggle="modal"
+                                data-bs-target="#deleteBook{{ book.id }}">Удалить</button>
+                            {% endif %}
+                        </div>
+                        {% endif %}
+                    </div>
+                    <div class="card-footer text-muted">
+                        <p class="mb-2">
+                            Отзывы: {{ reviews_count.get(book.id, 0) }}
+                            <span>★</span> <span>{{ "%.2f" | format(book.rating) }}</span>
+                        </p>
+
+                    </div>
+                </div>
+                <!-- Modal -->
+                <div class="modal fade" id="deleteBook{{ book.id }}" data-bs-backdrop="static" data-bs-keyboard="false"
+                    tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+                    <div class="modal-dialog">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h5 class="modal-title" id="staticBackdropLabel">Удаление книги</h5>
+                                <button type="button" class="btn-close" data-bs-dismiss="modal"
+                                    aria-label="Close"></button>
+                            </div>
+                            <div class="modal-body">
+                                <p>Вы уверены, что хотите удалить книгу <span>"{{ book.name }}"</span>?</p>
+                                <form class="d-none" action="{{ url_for('books.delete', book_id = book.id) }}"
+                                    method="POST">
+                                    <input type="submit" id="deleteButton{{ book.id }}">
+                                </form>
+                            </div>
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Отмена</button>
+                                <label for="deleteButton{{ book.id }}" class="btn btn-danger">Удалить</label>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+
+
+    {% if current_user.is_authenticated and current_user.is_admin %}
+    <div class="text-center my-3">
+        <a class="btn btn-lg btn-dark" href="{{ url_for('books.new') }}">Добавить книгу</a>
+    </div>
+    {% endif %}
+
+    <div class="mb-5">
+        {{ render_pagination(pagination, request.endpoint, search_params) }}
+    </div>
+
+
+</div>
+{% endblock %}

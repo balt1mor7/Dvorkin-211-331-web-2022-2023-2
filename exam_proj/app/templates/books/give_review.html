@@ -1,0 +1,32 @@
+{% extends 'base.html' %}
+
+{% block content %}
+    <div class="container">
+        <h2 class="my-3 text-center text-uppercase font-weight-bold">Отзыв</h2>
+
+        <form method="POST" action="{{ url_for('books.send_review', book_id = book.id) }}" enctype="multipart/form-data">
+            <div class="mb-3 row d-flex justify-content-center">
+                <div class="col-md-6 d-flex flex-column ">
+                    <div class="mb-3">
+                        <label for="rating">Оценка</label>
+                        <select class="form-select" name="rating_id" id="rating">
+                            <option value="5" selected>Отлично</option>
+                            <option value="4">Хорошо</option>
+                            <option value="3">Удовлетворительно</option>
+                            <option value="2">Неудовлетворительно</option>
+                            <option value="1">Плохо</option>
+                            <option value="0">Ужасно</option>
+                        </select>
+                    </div>
+                    <div class="mb-3">
+                        <label for="text_review">Текст отзыва</label>
+                        <textarea class="form-control" name="text_review" id="text_review" cols="30" rows="10"></textarea>
+                    </div>
+                </div>
+
+            <div class="mb-3 text-center">
+                <input type="submit" class="btn btn-dark" value="Отправить">
+            </div>
+        </form>
+    </div>
+{% endblock %}

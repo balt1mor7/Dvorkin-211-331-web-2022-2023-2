@@ -1,0 +1,66 @@
+{% extends 'base.html' %}
+{% from 'pagination.html' import render_pagination %}
+
+{% block content %}
+<div class="my-5">
+    <h2 class="mb-3 text-center text-uppercase font-weight-bold">Мои подборки</h2>
+</div>
+<div class="collections-list container-fluid">
+    <div class="row">
+        {% for collection in collections %}
+        <div class="col-sm-6 mb-3 mb-sm-0">
+            <div class="card h-100 d-flex flex-column">
+                <div class="card-body">
+                    <h5 class="collection_name">{{ collection.name }}</h5>
+                    <p class="collection_desc">{{ collection.desc }}</p>
+                    <a href="{{ url_for('collections.show_collection', collection_id = collection.id) }}"
+                        class="btn btn-primary">Просмотр</a>
+                </div>
+                <div class="card-footer text-muted ">
+                    <p class="mb-2">
+                        Количество книг: {{ books_count.get(collection.id, 0) }}
+                    </p>
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+    <div class="text-center my-3">
+        <button class="btn btn-lg btn-dark" data-bs-toggle="modal" data-bs-target="#newCollection">Добавить
+            подборку</button>
+    </div>
+    <!-- Vertically centered modal -->
+    <div class="modal fade" id="newCollection" tabindex="-1" aria-labelledby="newCollectionModal" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h1 class="modal-title fs-5" id="newCollectionModal">Новая подборка</h1>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <form action="{{ url_for('collections.create') }}" method="POST">
+                        <div class="mb-3">
+                            <label for="name" class="col-form-label">Название:</label>
+                            <input type="text" class="form-control" id="name" name="name">
+                        </div>
+                        <div class="mb-3">
+                            <label for="desc" class="col-form-label">Описание (по желанию):</label>
+                            <textarea class="form-control" id="desc" name="desc"></textarea>
+                        </div>
+                        <input class="d-none" type="submit" id="addButton">
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Отмена</button>
+                    <label for="addButton" class="btn btn-primary">Добавить</label>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="mb-5">
+        {{ render_pagination(pagination, request.endpoint, search_params) }}
+    </div>
+
+</div>
+
+{% endblock %}
